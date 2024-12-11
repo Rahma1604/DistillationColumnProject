@@ -1,76 +1,75 @@
 function gui_main()
-    % Create the GUI using Octave-compatible commands
-    fig = figure('Name', 'Distillation Column GUI', 'Position', [100, 100, 800, 800]);
+    % Create the GUI figure
+    fig = figure('Name', 'Distillation Column GUI', 'Position', [100, 100, 800, 600]);
 
-    % Input fields for energy balance
-    uicontrol('Style', 'text', 'Position', [50, 740, 150, 20], 'String', 'Mdot Feed (kg/s):');
-    input_mdot_feed = uicontrol('Style', 'edit', 'Position', [200, 740, 100, 20]);
+    % Adjusted positions to fit within 800x600 resolution
+    % Energy balance inputs
+    uicontrol('Style', 'text', 'Position', [20, 550, 150, 20], 'String', 'Mdot Feed (kg/s):');
+    input_mdot_feed = uicontrol('Style', 'edit', 'Position', [180, 550, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 700, 150, 20], 'String', 'H Feed (kJ/kg):');
-    input_h_feed = uicontrol('Style', 'edit', 'Position', [200, 700, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 520, 150, 20], 'String', 'H Feed (kJ/kg):');
+    input_h_feed = uicontrol('Style', 'edit', 'Position', [180, 520, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 660, 150, 20], 'String', 'Mdot Distillate (kg/s):');
-    input_mdot_distillate = uicontrol('Style', 'edit', 'Position', [200, 660, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 490, 150, 20], 'String', 'Mdot Distillate (kg/s):');
+    input_mdot_distillate = uicontrol('Style', 'edit', 'Position', [180, 490, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 620, 150, 20], 'String', 'H Distillate (kJ/kg):');
-    input_h_distillate = uicontrol('Style', 'edit', 'Position', [200, 620, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 460, 150, 20], 'String', 'H Distillate (kJ/kg):');
+    input_h_distillate = uicontrol('Style', 'edit', 'Position', [180, 460, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 580, 150, 20], 'String', 'Mdot Bottom (kg/s):');
-    input_mdot_bottom = uicontrol('Style', 'edit', 'Position', [200, 580, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 430, 150, 20], 'String', 'Mdot Bottom (kg/s):');
+    input_mdot_bottom = uicontrol('Style', 'edit', 'Position', [180, 430, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 540, 150, 20], 'String', 'H Bottom (kJ/kg):');
-    input_h_bottom = uicontrol('Style', 'edit', 'Position', [200, 540, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 400, 150, 20], 'String', 'H Bottom (kJ/kg):');
+    input_h_bottom = uicontrol('Style', 'edit', 'Position', [180, 400, 100, 20]);
 
-    % Input fields for material balance
-    uicontrol('Style', 'text', 'Position', [50, 500, 150, 20], 'String', 'Feed Flow Rate (F):');
-    input_F = uicontrol('Style', 'edit', 'Position', [200, 500, 100, 20]);
+    % Material balance inputs
+    uicontrol('Style', 'text', 'Position', [20, 370, 150, 20], 'String', 'Feed Flow Rate (F):');
+    input_F = uicontrol('Style', 'edit', 'Position', [180, 370, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 460, 150, 20], 'String', 'Feed Composition (x_F):');
-    input_x_F = uicontrol('Style', 'edit', 'Position', [200, 460, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 340, 150, 20], 'String', 'Feed Composition (x_F):');
+    input_x_F = uicontrol('Style', 'edit', 'Position', [180, 340, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 420, 150, 20], 'String', 'Distillate Composition (x_D):');
-    input_x_D = uicontrol('Style', 'edit', 'Position', [200, 420, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 310, 150, 20], 'String', 'Distillate Composition (x_D):');
+    input_x_D = uicontrol('Style', 'edit', 'Position', [180, 310, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 380, 150, 20], 'String', 'Bottoms Composition (x_B):');
-    input_x_B = uicontrol('Style', 'edit', 'Position', [200, 380, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 280, 150, 20], 'String', 'Bottoms Composition (x_B):');
+    input_x_B = uicontrol('Style', 'edit', 'Position', [180, 280, 100, 20]);
 
-    % Input fields for VLE model
-    uicontrol('Style', 'text', 'Position', [50, 340, 150, 20], 'String', 'Temperature (T °C):');
-    input_T = uicontrol('Style', 'edit', 'Position', [200, 340, 100, 20]);
+    % VLE model inputs
+    uicontrol('Style', 'text', 'Position', [20, 250, 150, 20], 'String', 'Temperature (T °C):');
+    input_T = uicontrol('Style', 'edit', 'Position', [180, 250, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 300, 150, 20], 'String', 'Pressure (P mmHg):');
-    input_P = uicontrol('Style', 'edit', 'Position', [200, 300, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 220, 150, 20], 'String', 'Pressure (P mmHg):');
+    input_P = uicontrol('Style', 'edit', 'Position', [180, 220, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 260, 150, 20], 'String', 'Liquid Mole Fractions (X):');
-    input_X = uicontrol('Style', 'edit', 'Position', [200, 260, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 190, 150, 20], 'String', 'Liquid Mole Fractions (X):');
+    input_X = uicontrol('Style', 'edit', 'Position', [180, 190, 100, 20]);
 
-    % Input fields for Antoine constants
-    uicontrol('Style', 'text', 'Position', [50, 220, 150, 20], 'String', 'Antoine Constant A:');
-    input_A = uicontrol('Style', 'edit', 'Position', [200, 220, 100, 20]);
+    % Antoine constants inputs
+    uicontrol('Style', 'text', 'Position', [20, 160, 150, 20], 'String', 'Antoine Constant A:');
+    input_A = uicontrol('Style', 'edit', 'Position', [180, 160, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 180, 150, 20], 'String', 'Antoine Constant B:');
-    input_B = uicontrol('Style', 'edit', 'Position', [200, 180, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 130, 150, 20], 'String', 'Antoine Constant B:');
+    input_B = uicontrol('Style', 'edit', 'Position', [180, 130, 100, 20]);
 
-    uicontrol('Style', 'text', 'Position', [50, 140, 150, 20], 'String', 'Antoine Constant C:');
-    input_C = uicontrol('Style', 'edit', 'Position', [200, 140, 100, 20]);
+    uicontrol('Style', 'text', 'Position', [20, 100, 150, 20], 'String', 'Antoine Constant C:');
+    input_C = uicontrol('Style', 'edit', 'Position', [180, 100, 100, 20]);
 
-    % Buttons to call models
-    uicontrol('Style', 'pushbutton', 'Position', [50, 100, 200, 30], 'String', 'Run VLE Model', ...
+    % Buttons for models and plots
+    uicontrol('Style', 'pushbutton', 'Position', [300, 550, 200, 30], 'String', 'Run VLE Model', ...
         'Callback', @(src, event)run_vle_model());
-
-    % Buttons to plot concentration, temperature, energy balance, and material balance
-    uicontrol('Style', 'pushbutton', 'Position', [50, 50, 200, 30], 'String', 'Plot Concentration Profile', ...
+    uicontrol('Style', 'pushbutton', 'Position', [300, 500, 200, 30], 'String', 'Plot Concentration Profile', ...
         'Callback', @(src, event)plot_concentration_profile());
-    uicontrol('Style', 'pushbutton', 'Position', [250, 50, 200, 30], 'String', 'Plot Temperature Profile', ...
+    uicontrol('Style', 'pushbutton', 'Position', [300, 450, 200, 30], 'String', 'Plot Temperature Profile', ...
         'Callback', @(src, event)plot_temperature_profile());
-    uicontrol('Style', 'pushbutton', 'Position', [450, 50, 200, 30], 'String', 'Plot Energy Balance', ...
+    uicontrol('Style', 'pushbutton', 'Position', [300, 400, 200, 30], 'String', 'Plot Energy Balance', ...
         'Callback', @(src, event)plot_energy_balance());
-    uicontrol('Style', 'pushbutton', 'Position', [650, 50, 200, 30], 'String', 'Plot Material Balance', ...
+    uicontrol('Style', 'pushbutton', 'Position', [300, 350, 200, 30], 'String', 'Plot Material Balance', ...
         'Callback', @(src, event)plot_material_balance());
 
-    % Output area to display results
-    uicontrol('Style', 'text', 'Position', [400, 740, 200, 20], 'String', 'Results:');
-    output = uicontrol('Style', 'edit', 'Position', [400, 100, 350, 600], 'Max', 2, 'Enable', 'inactive');
+    % Output area for results
+    uicontrol('Style', 'text', 'Position', [530, 550, 100, 20], 'String', 'Results:');
+    output = uicontrol('Style', 'edit', 'Position', [530, 250, 250, 280], 'Max', 2, 'Enable', 'inactive');
 
     % Nested function to call the VLE model
     function run_vle_model()
