@@ -58,6 +58,16 @@ function gui_main()
     uicontrol('Style', 'pushbutton', 'Position', [50, 100, 200, 30], 'String', 'Run VLE Model', ...
         'Callback', @(src, event)run_vle_model());
 
+    % Buttons to plot concentration, temperature, energy balance, and material balance
+    uicontrol('Style', 'pushbutton', 'Position', [50, 50, 200, 30], 'String', 'Plot Concentration Profile', ...
+        'Callback', @(src, event)plot_concentration_profile());
+    uicontrol('Style', 'pushbutton', 'Position', [250, 50, 200, 30], 'String', 'Plot Temperature Profile', ...
+        'Callback', @(src, event)plot_temperature_profile());
+    uicontrol('Style', 'pushbutton', 'Position', [450, 50, 200, 30], 'String', 'Plot Energy Balance', ...
+        'Callback', @(src, event)plot_energy_balance());
+    uicontrol('Style', 'pushbutton', 'Position', [650, 50, 200, 30], 'String', 'Plot Material Balance', ...
+        'Callback', @(src, event)plot_material_balance());
+
     % Output area to display results
     uicontrol('Style', 'text', 'Position', [400, 740, 200, 20], 'String', 'Results:');
     output = uicontrol('Style', 'edit', 'Position', [400, 100, 350, 600], 'Max', 2, 'Enable', 'inactive');
@@ -99,5 +109,105 @@ function gui_main()
         catch ME
             set(output, 'String', ['Error: ', ME.message]);
         end
+    end
+
+    % Nested functions to handle plotting
+  function plot_concentration_profile()
+    % جلب القيم المدخلة
+    feed_composition = str2double(get(input_x_F, 'String'));
+    distillate_composition = str2double(get(input_x_D, 'String'));
+    bottoms_composition = str2double(get(input_x_B, 'String'));
+
+    % التحقق من المدخلات
+    if isnan(feed_composition) || isnan(distillate_composition) || isnan(bottoms_composition)
+        set(output, 'String', 'Error: Please enter valid numerical compositions.');
+        return;
+    end
+
+    % التأكد من أن القيم بين 0 و 1
+    if any([feed_composition, distillate_composition, bottoms_composition] < 0 | ...
+            [feed_composition, distillate_composition, bottoms_composition] > 1)
+        set(output, 'String', 'Error: Compositions must be between 0 and 1.');
+        return;
+    end
+
+    % توليد بيانات التركيز بناءً على المدخلات
+    stages = 0:0.2:1;  % 6 قيم
+    concentration_profile = [feed_composition, distillate_composition, bottoms_composition, bottoms_composition, distillate_composition, feed_composition];  % 6 قيم
+
+    % التأكد من تطابق طول المصفوفات
+    if length(stages) ~= length(concentration_profile)
+        set(output, 'String', 'Error: Mismatch in the length of stages and concentration profile.');
+        return;
+    end
+
+    % طباعة القيم للتحقق
+    disp(concentration_profile);
+
+    % رسم الجراف
+    figure;
+    plot(stages, concentration_profile, '-o');
+    title('Concentration Profile');
+    xlabel('Stage');
+    ylabel('Composition');
+end
+
+
+
+    function plot_temperature_profile()
+        % Generate temperature profile based on simple interpolation
+        feed_temperature = str2double(get(input_T, 'String'));  % Assuming T is feed temperature
+        boiling_point = 100;  % Example boiling point of the component
+        stages = 0:0.2:1;
+        temperature_profile = linspace(feed_temperature, boiling_point, length(stages));
+
+        % Plot temperature profile
+        figure;
+        plot(stages, temperature_profile, '-o');
+        title('Temperature Profile');
+        xlabel('Stage');
+        ylabel('Temperature (°C)');
+    end
+
+    function plot_energy_balance()
+        % Fetch enthalpy and flow rates
+        mdot_feed = str2double(get(input_mdot_feed, 'String'));
+        h_feed = str2double(get(input_h_feed, 'String'));
+        mdot_distillate = str2double(get(input_mdot_distillate, 'String'));
+        h_distillate = str2double(get(input_h_distillate, 'String'));
+        mdot_bottom = str2double(get(input_mdot_bottom, 'String'));
+        h_bottom = str2double(get(input_h_bottom, 'String'));
+
+        % Energy balance calculations (simple form)
+        total_feed_energy = mdot_feed * h_feed;
+        total_distillate_energy = mdot_distillate * h_distillate;
+        total_bottom_energy = mdot_bottom * h_bottom;
+
+        % Energy balance at different stages
+        energy_balance = [total_feed_energy, total_distillate_energy, total_bottom_energy];
+
+        % Plot energy balance
+        figure;
+        plot([1, 2, 3], energy_balance, '-o');
+        title('Energy Balance');
+        xlabel('Stage');
+        ylabel('Energy (kJ/s)');
+    end
+
+    function plot_material_balance()
+        % Fetch flow rates
+        mdot_feed = str2double(get(input_mdot_feed, 'String'));
+        mdot_distillate = str2double(get(input_mdot_distillate, 'String'));
+        mdot_bottom = str2double(get(input_mdot_bottom, 'String'));
+
+        % Material balance calculations
+        material_balance = [mdot_feed, mdot_distillate, mdot_bottom];
+
+        % Plot material balance
+        figure;
+        plot([1, 2, 3], material_balance, '-o');
+        title('Material Balance');
+        xlabel('Stage');
+        ylabel('Flow Rate (kg/s)');
     end
 end
